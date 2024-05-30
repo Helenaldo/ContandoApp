@@ -44,7 +44,7 @@ $(function() {
       Swal.fire({
         position: 'top-end',
         icon: 'success',
-        title: 'Your work has been saved',
+        title: 'Cadastro realizado com Sucesso',
         showConfirmButton: false,
         timer: 1500
       })
@@ -56,7 +56,7 @@ $(function() {
         },
         buttonsStyling: false,
       })
-      
+
       swalWithBootstrapButtons.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -161,10 +161,10 @@ $(function() {
         showConfirmButton: false,
         timer: 1113000
       });
-      
+
       Toast.fire({
         icon: 'success',
-        title: 'Signed in successfully'
+        title: 'Cadastro realizado com sucesso'
       })
     }
   }

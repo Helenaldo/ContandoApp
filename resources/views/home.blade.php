@@ -2,7 +2,7 @@
 @section('title', 'Dashboard')
 @section('content')
             {{-- Início do Content --}}
-            <div class="page-content">
+
 
                 <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
                     <div>
@@ -535,6 +535,6 @@
                     </div>
                 </div> <!-- row -->
 
-            </div>
+
             {{-- Fim do Content --}}
 @endsection

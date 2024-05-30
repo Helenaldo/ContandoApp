@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Http;
 
 class ApiService
@@ -15,7 +16,7 @@ class ApiService
     public function __construct()
     {
         // Atribui a URL base para as requisições a partir de uma variável de ambiente ou usa um valor padrão se não estiver definida.
-        $this->url = env('API_BASE_URL', 'http://default-url-if-not-set-in-env/api');
+        $this->url = env('API_PAINEL_BASE_URL', 'http://default-url-if-not-set-in-env/api');
     }
 
     /**
@@ -25,10 +26,15 @@ class ApiService
      * @param string $token Token de autenticação para acesso à API.
      * @return array Resposta da API convertida em array.
      */
-    public function get(string $endpoint, string $token): array
+    public function get(string $endpoint): array
     {
-        // Realiza uma requisição GET com o token de autenticação incluído no cabeçalho.
-        $response = Http::acceptJson()->withToken($token)->get($this->url . $endpoint);
+        $token = $this->getCurrentToken();
+        if($token) {
+            // Realiza uma requisição GET com o token de autenticação incluído no cabeçalho.
+            $response = Http::acceptJson()->withToken($token)->get($this->url . $endpoint);
+        } else {
+            $response = Http::acceptJson()->get($this->url . $endpoint);
+        }
 
         // Verifica se a requisição foi bem-sucedida e retorna a resposta ou um erro.
         if ($response->successful()) {
@@ -46,10 +52,11 @@ class ApiService
      * @param string|null $token Token de autenticação opcional para acesso à API.
      * @return array Resposta da API convertida em array.
      */
-    public function post(string $endpoint, array $data, ?string $token = null): array
+    public function post(string $endpoint, array $data): array
     {
         // Realiza uma requisição POST, incluindo o token de autenticação se fornecido.
-        if ($token) {
+        $token = $this->getCurrentToken();
+        if($token) {
             $response = Http::acceptJson()->withToken($token)->post($this->url . $endpoint, $data);
         } else {
             $response = Http::acceptJson()->post($this->url . $endpoint, $data);
@@ -62,30 +69,12 @@ class ApiService
             return ['error' => 'Requisição falhou com o status: ' . $response->status()];
         }
     }
+
+    private function getCurrentToken() {
+        $token = session('authenticated');
+        if($token) {
+            return $token['token'];
+        }
+        return null;
+    }
 }
-
-
-
-// namespace App\Services;
-
-// use Illuminate\Support\Facades\Http;
-
-// Class ApiService{
-
-//     protected $url = 'http://192.168.0.18:8000/api';
-
-//     public function get($endpoint, $token) {
-//         // Fazer uma requisição http get passando o token logado no header
-//         $request = Http::acceptJson()->withToken($token)->get($this->url.$endpoint);
-//         return $request->json();
-//     }
-
-//     public function post($endpoint,  $data, $token = null) {
-//         if($token) {
-//             $request = Http::acceptJson()->withToken($token)->post($this->url.$endpoint, $data);
-//         } else {
-//             $request = Http::acceptJson()->post($this->url.$endpoint, $data);
-//         }
-//         return $request->json();
-//     }
-// }

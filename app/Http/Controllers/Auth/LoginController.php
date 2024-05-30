@@ -21,7 +21,7 @@ class LoginController extends Controller
         if(!$response['success']) {
             return redirect(route('login'));
         }
-
+        // dd($response);
         session(['authenticated' => $response]);
 
         return redirect(route('home'));
