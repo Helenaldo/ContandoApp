@@ -41,11 +41,11 @@
                         @csrf
                       <div class="form-group">
                         <label for="exampleInputEmail1">Endereço de E-mail</label>
-                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="E-mail">
+                        <input type="email" name="email" value="contato1@helenaldo.com.br" class="form-control" id="exampleInputEmail1" placeholder="E-mail">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputPassword1">Senha</label>
-                        <input type="password" name="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password" placeholder="Senha">
+                        <input type="password" name="password" value="123456" class="form-control" id="exampleInputPassword1" autocomplete="current-password" placeholder="Senha">
                       </div>
                       <div class="form-check form-check-flat form-check-primary">
                         <label class="form-check-label">

@@ -6,7 +6,7 @@
 <div class="col-md-8 mx-auto align-items-center">
     <div class="card">
         <div class="card-header">
-            <h4>Adicionar Clientes</h4>
+            <h4>Alterar Cliente</h4>
         </div>
         <div class="card-body">
 
@@ -26,23 +26,25 @@
             </div>
         @endif
 
-            <form action="{{ route('clientes.store')}}" method="post">
+            <form action="{{ route('clientes.update', ['cliente' => $cliente['id'] ])}}" method="POST">
+                @method('put')
                 @csrf
+
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Tipo de identificação*</label>
-                            <select name="tipo_identificacao" id="tipo_identificacao" class="form-control">
-                                <option selected="" disabled="">Selecione...</option>
-                                <option value="CNPJ">Pessoa Jurídica</option>
-                                <option value="CPF">Pessoa Física</option>
+                            <select id="tipo_identificacao" disabled class="form-control">
+                                <option selected="">Selecione...</option>
+                                <option value="CNPJ" @selected($cliente['tipo_identificacao'] === 'CNPJ')>Pessoa Jurídica</option>
+                                <option value="CPF" @selected($cliente['tipo_identificacao'] === 'CPF')>Pessoa Física</option>
                             </select>
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label" id="cnpjCpfLabel">CNPJ/CPF*</label>
-                            <input name="cpf_cnpj" id='cnpj_cpf' value="{{ old('cpf_cnpj') }}" type="text" class="form-control">
+                            <input disabled id='cnpj_cpf' value="{{ $cliente['cpf_cnpj'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-4">
@@ -50,8 +52,8 @@
                             <label class="control-label">Tipo de estabelecimento</label>
                             <select name="tipo" class="form-control">
                                 <option selected="" disabled="">Selecione...</option>
-                                <option value="Matriz">Matriz</option>
-                                <option value="Filial">Filial</option>
+                                <option value="Matriz" @selected($cliente['tipo'] === 'Matriz')>Matriz</option>
+                                <option value="Filial" @selected($cliente['tipo'] === 'Filial')>Filial</option>
                             </select>
                         </div>
                     </div><!-- Col -->
@@ -60,13 +62,13 @@
                     <div class="col-sm-8">
                         <div class="form-group">
                             <label class="control-label">Nome*</label>
-                            <input name="nome" value="{{ old('nome') }}" type="text" class="form-control">
+                            <input name="nome" value="{{ $cliente['nome'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Nome de Fantasia</label>
-                            <input name="fantasia" value="{{ old('fantasia') }}" type="text" class="form-control">
+                            <input name="fantasia" value="{{ $cliente['fantasia'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                 </div><!-- Row -->
@@ -74,19 +76,19 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="control-label">CEP</label>
-                            <input name="cep" id="cep" value="{{ old('cep') }}" onblur="pesquisacep(this.value);" type="text" class="form-control">
+                            <input name="cep" id="cep" value="{{ $cliente['cep'] }}" onblur="pesquisacep(this.value);" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Logradouro</label>
-                            <input name="logradouro" id="logradouro" value="{{ old('logradouro') }}" type="text" class="form-control">
+                            <input name="logradouro" id="logradouro" value="{{ $cliente['logradouro'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label class="control-label">Número</label>
-                            <input name="numero" value="{{ old('numero') }}" type="text" class="form-control">
+                            <input name="numero" value="{{ $cliente['numero'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                 </div><!-- Row -->
@@ -94,13 +96,13 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Bairro</label>
-                            <input name="bairro" id="bairro" value="{{ old('bairro') }}" type="text" class="form-control">
+                            <input name="bairro" id="bairro" value="{{ $cliente['bairro'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Complemento</label>
-                            <input name="complemento" value="{{ old('complemento') }}" type="text" class="form-control">
+                            <input name="complemento" value="{{ $cliente['complemento'] }}" type="text" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-4">
@@ -114,7 +116,7 @@
 
                                 @foreach ($cidades as $cidade)
 
-                                    <option value="{{$cidade['id']}}">{{$cidade['nome']}}</option>
+                                    <option value="{{$cidade['id']}}" @selected($cidade['id'] === $cliente['cidade_id'])>{{$cidade['nome']}}</option>
 
                                 @endforeach
 
@@ -127,13 +129,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Cliente desde</label>
-                            <input name="data_entrada" type="date" class="form-control">
+                            <input name="data_entrada" value="{{ $cliente['data_entrada'] }}" type="date" class="form-control">
                         </div>
                     </div><!-- Col -->
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Distrato</label>
-                            <input name="data_saida" type="date" class="form-control">
+                            <input name="data_saida" value="{{ $cliente['data_saida'] }}" type="date" class="form-control">
                         </div>
                     </div><!-- Col -->
                 </div><!-- Row -->

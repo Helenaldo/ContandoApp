@@ -3,9 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Painel\ClienteController;
+use App\Http\Controllers\Painel\ClienteTributacaoController;
 use App\Http\Middleware\AuthenticateApi;
-use App\Livewire\Painel\Cliente\Create;
-use App\Livewire\Painel\Cliente\Listar;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,10 +18,11 @@ Route::middleware(['web', AuthenticateApi::class])
     })->name('home');
 
     Route::get('/logout', LogoutController::class)->name('logout');
+    Route::resource('/painel/clientes/tributacao', ClienteTributacaoController::class);
     Route::resource('/painel/clientes', ClienteController::class);
 
 
-});
+    });
 
 
 

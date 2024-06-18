@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Painel;
 
 use App\Http\Controllers\Controller;
-use App\Services\ApiService;
+use App\Services\PainelApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -12,7 +12,7 @@ class ClienteController extends Controller
     private $apiService;
 
     public function __construct() {
-        $this->apiService = new ApiService;
+        $this->apiService = new PainelApiService;
     }
     /**
      * Display a listing of the resource.
@@ -20,9 +20,6 @@ class ClienteController extends Controller
     public function index()
     {
         $clientes = $this->apiService->get('/cliente');
-        //dd($clientes);
-        // $this->apiService->get('/clientes');
-
         return view('painel.cliente.listar', compact('clientes'));
     }
 
@@ -31,7 +28,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        $cidades = Http::get(env("API_PAINEL_BASE_URL"). '/cidades')['data'];
+        $cidades = $this->apiService->get('/cidades')['data'];
         $errors = [];
         return view('painel.cliente.create', compact( 'cidades', 'errors'));
     }
@@ -41,6 +38,17 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
+        // Obter cidades da API
+        try {
+            $cidades = $this->apiService->get('/cidades')['data'];
+        } catch (\Exception $e) {
+            return view('painel.cliente.create', [
+                'errors' => ['error' => 'Erro ao obter cidades: ' . $e->getMessage()],
+                'cidades' => [],
+            ]);
+        }
+
+        // Validar dados
         $cliente = $request->only([
             'tipo_identificacao', // CNPJ ou CPF
             'cpf_cnpj',
@@ -57,17 +65,19 @@ class ClienteController extends Controller
             'tipo', // Matriz ou Filial
         ]);
 
-        // Chama a API
-        $api = new ApiService;
+         // Chama a API
+        $api = new PainelApiService();
         $response = $api->post('/cliente', $cliente);
 
 
-        // Verifica se há erros na resposta
+         // Verifica se há erros na resposta
         if (isset($response['error'])) {
             return view('painel.cliente.create', [
-                'errors' => is_array($response['error']) ? $response['error'] : [$response['error']],
+                'errors' => is_array($response['message']) ? $response['message'] : [$response['message']],
+                'cidades' => $cidades,
             ]);
         }
+
         // Se não houver erros, redireciona com mensagem de sucesso
         return redirect()->route('clientes.index')->with('success', 'Cliente criado com sucesso');
     }
@@ -85,7 +95,11 @@ class ClienteController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $cliente = $this->apiService->get('/cliente/'. $id);
+        $cidades = $this->apiService->get('/cidades')['data'];
+
+        $errors = [];
+        return view('painel.cliente.edit', compact( 'cidades', 'errors', 'cliente'));
     }
 
     /**
@@ -93,7 +107,35 @@ class ClienteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $cliente = $request->only([
+            'nome',
+            'fantasia',
+            'cep',
+            'logradouro',
+            'numero',
+            'bairro',
+            'complemento',
+            'cidade_id',
+            'data_entrada',
+            'data_saida',
+            'tipo',
+        ]);
+
+        // Chama a API para atualizar o cliente
+        $response = $this->apiService->put('/cliente/' . $id, $cliente);
+
+        // Verifica se há erros na resposta
+        if (isset($response['error'])) {
+            return view('painel.cliente.edit', [
+                'errors' => is_array($response['message']) ? $response['message'] : [$response['message']],
+                'cliente' => $this->apiService->get('/cliente/'. $id),
+                'cidades' => $this->apiService->get('/cidades')['data']
+            ]);
+        }
+
+        // Se não houver erros, redireciona com mensagem de sucesso
+        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso');
+
     }
 
     /**
@@ -101,6 +143,7 @@ class ClienteController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->apiService->delete('/cliente/'. $id);
+        return redirect()->route('clientes.index')->with('success', 'Cliente deletado com sucesso');
     }
 }
