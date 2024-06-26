@@ -28,6 +28,30 @@
             </a>
           </li>
 
+          <li class="nav-item">
+            <a href="{{ route('processo.index')}}" class="nav-link">
+
+                <i class="link-icon" data-feather="folder"></i>
+              <span class="link-title">Processos</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+
+                <i class="link-icon" data-feather="users"></i>
+              <span class="link-title">Usuários</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+
+                <i class="link-icon" data-feather="settings"></i>
+              <span class="link-title">Configurações</span>
+            </a>
+          </li>
+
 
 
 {{--

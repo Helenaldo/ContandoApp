@@ -12,7 +12,7 @@
                             <i data-feather="plus"></i>
                         </a>
                         <div>
-                        Adicionar Tributação (155)
+                        Adicionar Tributação ({{count($tributacoes)}})
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                             <a class="nav-link active" href="{{ route('tributacao.index')}}">Tributação</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contatos</a>
+                            <a class="nav-link" href="{{ route('contatos.index')}}">Contatos</a>
                         </li>
 
                     </ul>

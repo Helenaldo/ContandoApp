@@ -1,96 +1,66 @@
 @extends('layouts.layout_principal')
-@section('title', 'Clientes')
+@section('title', 'Contatos de Clientes')
 
 @section('content')
-
-    {{-- <div class="row align-items-center">
-        <div class="col-md-12 grid-margin stretch-card align-items-center">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row ">
-
-                        <div class="col-md-3 d-flex align-items-center text-primary">
-                            <a href="{{ route( 'clientes.create')}}" type="button" class="btn btn-primary btn-icon d-flex justify-content-center align-items-center mr-2">
-                                <i data-feather="plus"></i>
-                            </a>
-                            <div>
-                            Total : 155
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 text-primary">
-                            <i data-feather="check-circle" class="mr-2"></i>Lucro Presumido: 87
-                        </div>
-
-                        <div class="col-md-3 text-primary">
-                            <i data-feather="check-circle" class="mr-2"></i>Lucro Real: 11
-                        </div>
-
-                        <div class="col-md-3 text-primary">
-                            <i data-feather="check-circle" class="mr-2"></i>Simples Nacional: 87
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
 
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header">
                     <div class="col-md-3 d-flex align-items-center text-primary">
-                        <a href="{{ route( 'clientes.create')}}" type="button" class="btn btn-primary btn-icon d-flex justify-content-center align-items-center mr-2">
+                        <a href="{{ route('contatos.create') }}" type="button" class="btn btn-primary btn-icon d-flex justify-content-center align-items-center mr-2">
                             <i data-feather="plus"></i>
                         </a>
                         <div>
-                        Adicionar Clientes ({{count($clientes)}})
+                        Adicionar Contato ({{count($contatos)}})
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body">
 
 
                     <ul class="nav nav-tabs mb-3">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('clientes.index')}}">Meus Clentes</a>
+                            <a class="nav-link" href="{{ route('clientes.index')}}">Meus Clentes</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('tributacao.index')}}">Tributação</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('contatos.index')}}">Contatos</a>
+                            <a class="nav-link active" href="{{ route('contatos.index')}}">Contatos</a>
                         </li>
 
                     </ul>
-
 
                     <div class="table-responsive">
                         <table id="dataTableExample" class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th>Cliente</th>
                                     <th>Nome</th>
-                                    <th>Nome de Fantasia</th>
-                                    <th>CNPJ/CPF</th>
+                                    <th>E-mail</th>
+                                    <th>Telefone</th>
                                     <th class="acoes-coluna">AÇÕES</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($clientes as $cliente)
+
+                                @foreach ($contatos as $contato)
+
                                 <tr>
-                                    <td>{{$cliente['nome']}}</td>
-                                    <td>{{$cliente['fantasia']}}</td>
-                                    <td>{{$cliente['cpf_cnpj']}}</td>
+                                    <td>{{$contato['cliente']['nome']}}</td>
+                                    <td>{{$contato['nome']}}</td>
+                                    <td>{{$contato['email']}}</td>
+                                    <td>{{$contato['telefone']}}</td>
                                     <td class="acoes-coluna">
                                         <a href="#" class="btn btn-primary btn-sm">Ver</a>
-                                        <a href="{{route('clientes.edit', $cliente['id'])}}" class="btn btn-warning btn-sm">Editar</a>
-                                        <form class="d-inline" action="{{route('clientes.destroy', $cliente['id'])}}" method="POST">
+                                        <a href="{{route('contatos.edit', $contato['id'])}}" class="btn btn-warning btn-sm">Editar</a>
+                                        <form class="d-inline" action="{{route('contatos.destroy', $contato['id'])}}" method="POST">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este cliente?')">Excluir</button>
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este contato?')">Excluir</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -110,13 +80,13 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" href="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-<link rel="stylesheet" href="/assets/vendors/sweetalert2/sweetalert2.min.css">
 <Style>
     .acoes-coluna {
         width: 180px; /* Ajuste o valor conforme necessário */
     }
 </Style>
+<link rel="stylesheet" href="/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="/assets/vendors/sweetalert2/sweetalert2.min.css">
 @endsection
 
 @section('js')

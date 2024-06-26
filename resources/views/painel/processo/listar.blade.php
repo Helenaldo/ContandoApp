@@ -1,5 +1,5 @@
 @extends('layouts.layout_principal')
-@section('title', 'Clientes')
+@section('title', 'Processos')
 
 @section('content')
 
@@ -46,26 +46,11 @@
                             <i data-feather="plus"></i>
                         </a>
                         <div>
-                        Adicionar Clientes ({{count($clientes)}})
+                        Adicionar Processo ({{count($clientes)}})
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-
-
-                    <ul class="nav nav-tabs mb-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('clientes.index')}}">Meus Clentes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('tributacao.index')}}">Tributação</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('contatos.index')}}">Contatos</a>
-                        </li>
-
-                    </ul>
-
 
                     <div class="table-responsive">
                         <table id="dataTableExample" class="table table-striped">

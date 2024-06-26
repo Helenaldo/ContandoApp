@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\PainelApiService;
 use Illuminate\Http\Request;
 
-class ClienteTributacaoController extends Controller
+class ClienteContatoController extends Controller
 {
     private $apiService;
 
@@ -18,8 +18,8 @@ class ClienteTributacaoController extends Controller
      */
     public function index()
     {
-        $tributacoes = $this->apiService->get('/tributacao-cliente');
-        return view('painel.cliente-tributacao.listar', compact('tributacoes'));
+        $contatos = $this->apiService->get('/contato-cliente');
+        return view('painel.cliente-contatos.listar', compact('contatos'));
     }
 
     /**
@@ -29,7 +29,7 @@ class ClienteTributacaoController extends Controller
     {
         $errors = [];
         $clientes = $this->apiService->get('/cliente');
-        return view('painel.cliente-tributacao.create', compact('errors', 'clientes'));
+        return view('painel.cliente-contatos.create', compact('errors', 'clientes'));
     }
 
     /**
@@ -38,26 +38,29 @@ class ClienteTributacaoController extends Controller
     public function store(Request $request)
     {
         // Validar dados
-        $tributacao = $request->only([
-            'tipo', // Presumido, Simples Nacional, Real Trimestral, Real Anual, Isenta, Imune
-            'data',
+        $contato = $request->only([
+            'nome',
+            'email',
+            'telefone',
             'cliente_id'
         ]);
 
-         // Chama a API
+        // Chama a API
         $api = new PainelApiService();
-        $response = $api->post('/tributacao-cliente', $tributacao);
+        $response = $api->post('/contato-cliente', $contato);
 
 
-         // Verifica se há erros na resposta
+        // Verifica se há erros na resposta
         if (isset($response['error'])) {
-            return view('painel.cliente-tributacao.create', [
-                'errors' => is_array($response['message']) ? $response['message'] : [$response['message']]
+            $clientes = $this->apiService->get('/cliente');
+            return view('painel.cliente-contatos.create', [
+                'errors' => is_array($response['message']) ? $response['message'] : [$response['message']],
+                'clientes' => $clientes
             ]);
         }
 
         // Se não houver erros, redireciona com mensagem de sucesso
-        return redirect()->route('tributacao.index')->with('success', 'Tributação criada com sucesso');
+        return redirect()->route('contatos.index')->with('success', 'Contato criado com sucesso');
     }
 
     /**
@@ -73,9 +76,9 @@ class ClienteTributacaoController extends Controller
      */
     public function edit(string $id)
     {
-        $tributacao = $this->apiService->get('/tributacao-cliente/'. $id);
+        $contato = $this->apiService->get('/contato-cliente/'. $id);
         $errors = [];
-        return view('painel.cliente-tributacao.edit', compact('errors', 'tributacao'));
+        return view('painel.cliente-contatos.edit', compact('errors', 'contato'));
     }
 
     /**
@@ -83,24 +86,25 @@ class ClienteTributacaoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $tributacao = $request->only([
-            'tipo', // Presumido, Simples Nacional, Real Trimestral, Real Anual, Isenta, Imune
-            'data',
+        $contato = $request->only([
+            'nome',
+            'email',
+            'telefone'
         ]);
 
         // Chama a API para atualizar o cliente
-        $response = $this->apiService->put('/tributacao-cliente/' . $id, $tributacao);
+        $response = $this->apiService->put('/contato-cliente/' . $id, $contato);
 
         // Verifica se há erros na resposta
         if (isset($response['error'])) {
-            return view('painel.cliente-tributacao.edit', [
+            return view('painel.cliente-contatos.edit', [
                 'errors' => is_array($response['message']) ? $response['message'] : [$response['message']],
-                'tributacao' => $this->apiService->get('/tributacao-cliente/'. $id)
+                'contato' => $this->apiService->get('/contato-cliente/'. $id)
             ]);
         }
 
         // Se não houver erros, redireciona com mensagem de sucesso
-        return redirect()->route('tributacao.index')->with('success', 'Cliente atualizado com sucesso');
+        return redirect()->route('contatos.index')->with('success', 'Contato atualizado com sucesso');
     }
 
     /**
@@ -108,7 +112,7 @@ class ClienteTributacaoController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->apiService->delete('/tributacao-cliente/'. $id);
-        return redirect()->route('tributacao.index')->with('success', 'Tributação deletada com sucesso');
+        $this->apiService->delete('/contato-cliente/'. $id);
+        return redirect()->route('contatos.index')->with('success', 'Contato deletado com sucesso');
     }
 }

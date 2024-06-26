@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Painel\ClienteContatoController;
 use App\Http\Controllers\Painel\ClienteController;
 use App\Http\Controllers\Painel\ClienteTributacaoController;
+use App\Http\Controllers\Painel\ProcessoController;
 use App\Http\Middleware\AuthenticateApi;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +21,9 @@ Route::middleware(['web', AuthenticateApi::class])
 
     Route::get('/logout', LogoutController::class)->name('logout');
     Route::resource('/painel/clientes/tributacao', ClienteTributacaoController::class);
+    Route::resource('/painel/clientes/contatos', ClienteContatoController::class);
     Route::resource('/painel/clientes', ClienteController::class);
-
+    Route::resource('/processo', ProcessoController::class);
 
     });
 
