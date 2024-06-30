@@ -18,8 +18,8 @@ class ProcessoController extends Controller
      */
     public function index()
     {
-        $clientes = $this->apiService->get('/cliente');
-        return view('painel.processo.listar', compact('clientes'));
+        $processos = $this->apiService->get('/processos');
+        return view('painel.processo.listar', compact('processos'));
     }
 
     /**
@@ -27,7 +27,10 @@ class ProcessoController extends Controller
      */
     public function create()
     {
-        //
+        $errors = [];
+        $clientes = $this->apiService->get('/cliente');
+        $users = $this->apiService->get('/app/user');
+        return view('painel.processo.create', compact('errors', 'clientes', 'users'));
     }
 
     /**
@@ -35,7 +38,31 @@ class ProcessoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validar dados
+        $processo = $request->only([
+            'cliente_id',
+            'user_id',
+            'numero',
+            'titulo',
+            'data',
+            'prazo',
+        ]);
+
+        // Chama a API
+        $response = $this->apiService->post('/processos', $processo);
+
+
+        // Verifica se há erros na resposta
+        if (isset($response['error'])) {
+            $clientes = $this->apiService->get('/cliente');
+            return view('painel.processo.create', [
+                'errors' => is_array($response['message']) ? $response['message'] : [$response['message']],
+                'clientes' => $clientes
+            ]);
+        }
+
+        // Se não houver erros, redireciona com mensagem de sucesso
+        return redirect()->route('processo.index')->with('success', 'Processo criado com sucesso');
     }
 
     /**
@@ -51,7 +78,10 @@ class ProcessoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $processo = $this->apiService->get('/processos/'. $id);
+        $users = $this->apiService->get('/app/user');
+        $errors = [];
+        return view('painel.processo.edit', compact('errors', 'processo', 'users'));
     }
 
     /**
@@ -59,7 +89,29 @@ class ProcessoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $processo = $request->only([
+            'cliente_id',
+            'user_id',
+            'numero',
+            'titulo',
+            'data',
+            'prazo',
+        ]);
+
+        // Chama a API para atualizar o cliente
+        $response = $this->apiService->put('/processos/' . $id, $processo);
+
+        // Verifica se há erros na resposta
+        if (isset($response['error'])) {
+            return view('painel.processo.edit', [
+                'errors' => is_array($response['message']) ? $response['message'] : [$response['message']],
+                'users' => $this->apiService->get('/app/user'),
+                'processo' => $this->apiService->get('/processos/'. $id)
+            ]);
+        }
+
+        // Se não houver erros, redireciona com mensagem de sucesso
+        return redirect()->route('processo.index')->with('success', 'Processo atualizado com sucesso');
     }
 
     /**
@@ -67,6 +119,7 @@ class ProcessoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->apiService->delete('/processos/'. $id);
+        return redirect()->route('processo.index')->with('success', 'Processo deletado com sucesso');
     }
 }

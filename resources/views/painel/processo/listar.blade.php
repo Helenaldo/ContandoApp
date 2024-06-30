@@ -42,11 +42,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-md-3 d-flex align-items-center text-primary">
-                        <a href="{{ route( 'clientes.create')}}" type="button" class="btn btn-primary btn-icon d-flex justify-content-center align-items-center mr-2">
+                        <a href="{{ route( 'processo.create' )}}" type="button" class="btn btn-primary btn-icon d-flex justify-content-center align-items-center mr-2">
                             <i data-feather="plus"></i>
                         </a>
                         <div>
-                        Adicionar Processo ({{count($clientes)}})
+                        Adicionar Processo ({{count($processos)}})
                         </div>
                     </div>
                 </div>
@@ -56,26 +56,37 @@
                         <table id="dataTableExample" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nome</th>
-                                    <th>Nome de Fantasia</th>
-                                    <th>CNPJ/CPF</th>
+                                    <th>Cliente</th>
+                                    <th>Processo nº</th>
+                                    <th>Título</th>
+                                    <th>Início</th>
+                                    <th>Status</th>
+                                    <th>Responsável</th>
                                     <th class="acoes-coluna">AÇÕES</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($clientes as $cliente)
+                                @foreach ($processos as $processo)
+                                @php
+                                    // Calcular o status (Em dia, Atrasado)
+                                    $prazo = \Carbon\Carbon::parse($processo['prazo']);
+                                    $status = $prazo->greaterThanOrEqualTo(\Carbon\Carbon::now()) ? 'Em dia' : 'Atrasado';
+                                @endphp
                                 <tr>
-                                    <td>{{$cliente['nome']}}</td>
-                                    <td>{{$cliente['fantasia']}}</td>
-                                    <td>{{$cliente['cpf_cnpj']}}</td>
+                                    <td>{{$processo['cliente']['nome']}}</td>
+                                    <td>{{$processo['numero']}}</td>
+                                    <td>{{$processo['titulo']}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($processo['data'])->format('d/m/Y') }}</td>
+                                    <td>{{  $status }}</td>
+                                    <td>{{ explode(' ', $processo['user']['name'])[0] }}</td>
                                     <td class="acoes-coluna">
                                         <a href="#" class="btn btn-primary btn-sm">Ver</a>
-                                        <a href="{{route('clientes.edit', $cliente['id'])}}" class="btn btn-warning btn-sm">Editar</a>
-                                        <form class="d-inline" action="{{route('clientes.destroy', $cliente['id'])}}" method="POST">
+                                        <a href="{{route('processo.edit', $processo['id'])}}" class="btn btn-warning btn-sm">Editar</a>
+                                        <form class="d-inline" action="{{route('processo.destroy', $processo['id'])}}" method="POST">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este cliente?')">Excluir</button>
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este processo?')">Excluir</button>
                                         </form>
                                     </td>
                                 </tr>

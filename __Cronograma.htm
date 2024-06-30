@@ -5,36 +5,33 @@ CRONOGRAMA DO APP (FRONT END) DO CONTANDO
 3) Configuramos o middleware de autenticação para verificar se user estar logado
 
 
-https://www.youtube.com/watch?v=DDXesGtMujU&list=PLqpSne4ysNphWqNbx_GklkXv0Plc6OLQy&index=3
-29:00 min
-
-
 Próximo aula
 <!-- 1) Criar blade de register -->
 <!-- 2) Incluir no blade o endpoint de register -->
 <!-- 3) Incluir na blade os dados do usuário logado -->
 <!-- 4) Cadastro de cliente/empresas -->
-
 <!-- 5) No ApiService não tem necessidade de passar o token toda vez que passar uma chamada, utilizar session -->
-6) Colocar a request de validação do Controller Register do site
 <!-- 7) Retirar tenant_contrato da tabela User -->
-8) No retorno do cadastro do cliente colocar o Sweet Alert igual já é no gconte painel
-9) Fixar o tamanho das colunas na listagem de clientes
-10) Na janela do login, colocar Licenciado para: no do Tenant
-
-
-
-
-Mostrar para Matheus
-<!-- 1) ApiService.php melhorada e puxando o link pelo .env -->
-
+<!-- 8) No retorno do cadastro do cliente colocar o Sweet Alert igual já é no gconte painel -->
+<!-- 9) Fixar o tamanho das colunas na listagem de clientes -->
+ 10) Store/Update avatar do usuário
+ 11) Quando deletar um usuário, deletar também seu avatar
+ 12) Só quem pode cadastrar e deletar usuário é o administrador
 
 
 
 No futuro
 1) Extender o Form request para retorno em json
 2) Criar uma exceção no login para quando o servidor (api) estiver fora do ar
-3) Fazer um preloader ao carregar a página: https://www.youtube.com/watch?v=TYaSGmYKF_c
+<!-- 3) Fazer um preloader ao carregar a página: https://www.youtube.com/watch?v=TYaSGmYKF_c -->
 4) Colocar o UserController no modo
 5) Só pode fazer login se o usuário email estiver verificado.
 6) Usuário só pode fazer login se o e-mail estiver validado.
+7) Colocar filtro de usuários, ativos e inativos
+8) Só quem pode cadastrar administrador é outro administrador
+9) Só quem pode inativar usuário é administrador
+11) Colocar mensagem de erro quando o servidor estiver desligado. Reencaminhar para uma página Servidor Inoperante
+12) O armazenamento dos arquivos deve ser via CDN-S3 separados por files.contando.com.br/{tenant_id}/{cliente_id}/categoria/arquivo
+13) O upload de imagem do avatar está com um limite de tamanho. Descobrir o limite para colocar na validação.
+14) Colocar a request de validação do Controller Register do site
+15) Processo eu posso deletar, mas tem que deletar também todos os movimentos e todos os anexos.

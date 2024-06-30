@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Contando | @yield('title')</title>
+
+    {{-- Preloader --}}
+    <link rel="stylesheet" href="/assets/css/preloader.css">
+
     <!-- core:css -->
     <link rel="stylesheet" href="/assets/vendors/core/core.css">
     <!-- endinject -->
@@ -26,6 +30,24 @@
 </head>
 
 <body>
+@php
+$preloader = rand(1, 8)
+@endphp
+
+    <!-- início do preloader -->
+    <div id="preloader">
+        <div class="inner">
+            <!-- HTML DA ANIMAÇÃO MUITO LOUCA DO SEU PRELOADER! -->
+            {{-- <div class="bolas">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div> --}}
+            <img src="/assets/images/preloader/{{$preloader}}.gif" alt="">
+        </div>
+    </div>
+    <!-- fim do preloader -->
+
     <div class="main-wrapper">
 
         <!-- partial:partials/_sidebar.html -->
@@ -52,6 +74,8 @@
 
         </div>
     </div>
+    {{-- Preloader --}}
+    <script src="/assets/js/preloader.js"></script>
 
     <!-- core:js -->
     <script src="/assets/vendors/core/core.js"></script>

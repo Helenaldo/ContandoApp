@@ -15,17 +15,21 @@ class PainelApiService
     public function __construct()
     {
         // Atribui a URL base para as requisições a partir de uma variável de ambiente ou usa um valor padrão se não estiver definida.
-        $this->url = env('API_PAINEL_BASE_URL', 'http://localhost:8000/api');
+        $this->url = env('API_PAINEL_BASE_URL', 'http://localhost:8000').'/api';
+
     }
 
-    public function request($method, $endpoint, $data = null, $headers = []) {
+    public function request($method, $endpoint, $data = null, $attach = null ) {
         $token = $this->getCurrentToken();
         if($token) {
             // Realiza uma requisição GET com o token de autenticação incluído no cabeçalho.
-            $response = Http::acceptJson()->withToken($token)->{$method}($this->url . $endpoint, $data);
-            // $response = Http::acceptJson()->withToken($token)->get($this->url . $endpoint);
+            if($attach) {
+                // dd($attach);
+                $response = Http::acceptJson()->withToken($token)->attach($attach['name'], $attach['file'])->{$method}($this->url . $endpoint, $data);
+            } else {
+                $response = Http::acceptJson()->withToken($token)->{$method}($this->url . $endpoint, $data);
+            }
         } else {
-            // $response = Http::acceptJson()->get($this->url . $endpoint);
             $response = Http::acceptJson()->{$method}($this->url . $endpoint, $data);
         }
 
@@ -56,9 +60,9 @@ class PainelApiService
      * @param string|null $token Token de autenticação opcional para acesso à API.
      * @return array Resposta da API convertida em array.
      */
-    public function post(string $endpoint, array $data): array
+    public function post(string $endpoint, array $data, $attach = null): array
     {
-        $response = $this->request('post', $endpoint, $data);
+        $response = $this->request('post', $endpoint, $data, $attach);
 
         // Verifica se a requisição foi bem-sucedida e retorna a resposta ou um erro.
         return $this->response('post', $response);
@@ -88,6 +92,9 @@ class PainelApiService
         }
 
         if(!$response->successful()) {
+
+            // dd($response->body());
+
             $responseError = $response->json();
              return [
                  'error' => true,
