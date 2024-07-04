@@ -70,7 +70,8 @@ class ProcessoController extends Controller
      */
     public function show(string $id)
     {
-        //
+            $processo = $this->apiService->get('/processos/'. $id);
+            return view('painel.processo.movimento.listar', compact('processo'));
     }
 
     /**

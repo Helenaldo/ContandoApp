@@ -131,10 +131,6 @@
 
 @section('js')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-<script src="/assets/js/mascaras.js"></script>
 <script src="/assets/vendors/select2/select2.min.js"></script>
 <script src="/assets/js/select2.js"></script>
-<script src="/assets/js/cep.js"></script>
-<script src="/assets/js/file-upload.js"></script>
 @endsection

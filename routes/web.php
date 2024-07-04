@@ -6,6 +6,7 @@ use App\Http\Controllers\Painel\ClienteContatoController;
 use App\Http\Controllers\Painel\ClienteController;
 use App\Http\Controllers\Painel\ClienteTributacaoController;
 use App\Http\Controllers\Painel\ProcessoController;
+use App\Http\Controllers\Painel\ProcessoMovimentoController;
 use App\Http\Controllers\Painel\UserController;
 use App\Http\Middleware\AuthenticateApi;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::middleware(['web', AuthenticateApi::class])
     Route::resource('/painel/clientes/tributacao', ClienteTributacaoController::class);
     Route::resource('/painel/clientes/contatos', ClienteContatoController::class);
     Route::resource('/painel/clientes', ClienteController::class);
+
+    Route::resource('/processo/movimento', ProcessoMovimentoController::class);
+
     Route::resource('/processo', ProcessoController::class);
     Route::resource('/user', UserController::class);
 

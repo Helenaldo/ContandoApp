@@ -2,41 +2,6 @@
 @section('title', 'Processos')
 
 @section('content')
-
-    {{-- <div class="row align-items-center">
-        <div class="col-md-12 grid-margin stretch-card align-items-center">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row ">
-
-                        <div class="col-md-3 d-flex align-items-center text-primary">
-                            <a href="{{ route( 'clientes.create')}}" type="button" class="btn btn-primary btn-icon d-flex justify-content-center align-items-center mr-2">
-                                <i data-feather="plus"></i>
-                            </a>
-                            <div>
-                            Total : 155
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 text-primary">
-                            <i data-feather="check-circle" class="mr-2"></i>Lucro Presumido: 87
-                        </div>
-
-                        <div class="col-md-3 text-primary">
-                            <i data-feather="check-circle" class="mr-2"></i>Lucro Real: 11
-                        </div>
-
-                        <div class="col-md-3 text-primary">
-                            <i data-feather="check-circle" class="mr-2"></i>Simples Nacional: 87
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
@@ -81,7 +46,7 @@
                                     <td>{{  $status }}</td>
                                     <td>{{ explode(' ', $processo['user']['name'])[0] }}</td>
                                     <td class="acoes-coluna">
-                                        <a href="#" class="btn btn-primary btn-sm">Ver</a>
+                                        <a href="{{ route('processo.show', $processo['id']) }}" class="btn btn-primary btn-sm">Ver</a>
                                         <a href="{{route('processo.edit', $processo['id'])}}" class="btn btn-warning btn-sm">Editar</a>
                                         <form class="d-inline" action="{{route('processo.destroy', $processo['id'])}}" method="POST">
                                             @csrf
