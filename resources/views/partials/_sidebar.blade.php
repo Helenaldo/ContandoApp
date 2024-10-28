@@ -45,13 +45,26 @@
             </li>
 
             <li class="nav-item">
-                <a href="" class="nav-link">
-
+                <a class="nav-link" data-toggle="collapse" href="#config" role="button" aria-expanded="false"
+                    aria-controls="icons">
                     <i class="link-icon" data-feather="settings"></i>
                     <span class="link-title">Configurações</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
                 </a>
+                <div class="collapse" id="config">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="{{ route('tenant.listar') }}" class="nav-link">Escritório</a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a href="pages/icons/flag-icons.html" class="nav-link">Flag Icons</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/icons/mdi-icons.html" class="nav-link">Mdi Icons</a>
+                        </li> --}}
+                    </ul>
+                </div>
             </li>
-
 
 
             {{--

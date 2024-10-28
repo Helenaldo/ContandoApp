@@ -10,7 +10,8 @@
         </div>
         <div class="card-body">
 
-        @if (!empty($errors))
+
+            @if (!empty($errors) && is_array($errors))
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors as $error)
@@ -24,24 +25,41 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+            @elseif(!empty($errors))
+            <div class="alert alert-danger">
+                <ul>
+                {!! implode('', $errors->all('<li>:message</li>')) !!}
+                </ul>
+            </div>
+            @endif
+
 
             <form action="{{ route('movimento.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
+                {{-- {{dd($processo)}} --}}
+                <input type="hidden" name="cliente_id" value="{{$processo['cliente_id']}}">
+                <input type="hidden" name="processo_id" value="{{$processo['id']}}">
 
                 <div class="row">
 
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Cliente</label>
-                            <input name="cliente_id" value="Nome do Cliente" type="text" class="form-control" disabled>
+                            <input value="{{$processo['cliente']['nome']}}" type="text" class="form-control" disabled>
                         </div>
                     </div><!-- Col -->
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label class="control-label">Processo</label>
-                            <input name="processo_id" value="Título do processo" type="email" class="form-control" disabled>
+                            <input value="{{$processo['titulo']}}" type="text" class="form-control" disabled>
+                        </div>
+                    </div><!-- Col -->
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">Número do Processo</label>
+                            <input value="{{$processo['numero']}}" type="text" class="form-control" disabled>
                         </div>
                     </div><!-- Col -->
 
@@ -64,7 +82,7 @@
 
                     <div class="form-group col-sm-4">
                         <label>Anexo (somente pdf)</label>
-                        <input type="file" name="avatar" class="file-upload-default">
+                        <input type="file" name="anexo" class="file-upload-default">
                         <div class="input-group">
                             <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload">
                             <span class="input-group-append">
@@ -76,7 +94,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Data*</label>
-                            <input name="data" type="date" class="form-control" required>
+                            <input name="data" type="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" class="form-control" required>
                         </div>
                     </div><!-- Col -->
 

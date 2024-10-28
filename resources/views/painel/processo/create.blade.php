@@ -85,7 +85,7 @@
                             <select name="user_id" class="form-control" required>
                                 <option selected="" disabled="">Selecione...</option>
                                 @foreach ($users as $user)
-                                <option value="{{$user['id']}}">{{$user['name']}}</option>
+                                <option value="{{$user['id']}}" @selected(session('authenticated')['user']['id'] === $user['id'])>{{$user['name']}}</option>
                                 @endforeach
 
                             </select>

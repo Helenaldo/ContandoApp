@@ -70,8 +70,8 @@ class ProcessoController extends Controller
      */
     public function show(string $id)
     {
-            $processo = $this->apiService->get('/processos/'. $id);
-            return view('painel.processo.movimento.listar', compact('processo'));
+        $processo = $this->apiService->get('/processos/'. $id);
+        return view('painel.processo.movimento.listar', compact('processo'));
     }
 
     /**
@@ -120,7 +120,19 @@ class ProcessoController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->apiService->delete('/processos/'. $id);
-        return redirect()->route('processo.index')->with('success', 'Processo deletado com sucesso');
+        // Faz a chamada para excluir o processo e captura a resposta da API
+        try {
+            $response = $this->apiService->delete('/processos/' . $id);
+
+            // Verifica se a exclusão foi bem-sucedida com base no código de status
+            if (isset($response['error']) && $response['error'] == true) {
+                return redirect()->route('processo.index')->with('error', 'Não é possível excluir o processo, pois existem movimentos relacionados.');
+            } else {
+                return redirect()->route('processo.index')->with('success', 'Processo deletado com sucesso');
+            }
+        } catch (\Exception $e) {
+            // Em caso de erro na comunicação com a API ou outra exceção, retorna a mensagem de erro
+            return redirect()->route('processo.index')->with('error', 'Ocorreu um erro ao tentar excluir o processo.');
+        }
     }
 }

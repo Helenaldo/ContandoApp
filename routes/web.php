@@ -7,6 +7,7 @@ use App\Http\Controllers\Painel\ClienteController;
 use App\Http\Controllers\Painel\ClienteTributacaoController;
 use App\Http\Controllers\Painel\ProcessoController;
 use App\Http\Controllers\Painel\ProcessoMovimentoController;
+use App\Http\Controllers\Painel\TenantController;
 use App\Http\Controllers\Painel\UserController;
 use App\Http\Middleware\AuthenticateApi;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,10 @@ Route::middleware(['web', AuthenticateApi::class])
     Route::resource('/processo', ProcessoController::class);
     Route::resource('/user', UserController::class);
 
+    Route::get('/tenant', [TenantController::class, 'index'])->name('tenant.listar');
+    Route::get('/tenant/edit', [TenantController::class, 'edit'])->name('tenant.edit');
+    Route::put('/tenant', [TenantController::class, 'update'])->name('tenant.update');
+
     });
 
 
@@ -40,4 +45,5 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/login', LoginController::class)->name('login.post');
+
 

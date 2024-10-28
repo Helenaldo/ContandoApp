@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Painel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Services\PainelApiService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -17,10 +19,17 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->apiService->get('/app/user');
-        return view('painel.user.listar', compact('users'));
+        // Captura o valor do parâmetro 'ativo' da query string
+        $ativo = $request->input('ativo', true);
+
+        $params = [
+            'ativo' => $ativo
+        ];
+
+        $users = $this->apiService->get('/app/user', $params);
+        return view('painel.user.listar', compact('users', 'params'));
     }
 
     /**
@@ -28,14 +37,14 @@ class UserController extends Controller
      */
     public function create()
     {
-        $errors = [];
+        $errors = session('errors', []);
         return view('painel.user.create', compact('errors'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         // Validar dados
         $user = $request->only([
@@ -72,6 +81,7 @@ class UserController extends Controller
                     'file' => fopen(public_path('upload/'.$imageName), 'r')
                 ]
             );
+
             unlink(public_path('upload/'.$imageName));
         }
 
@@ -93,19 +103,20 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = $this->apiService->get('/app/user/'. $id);
-        $errors = [];
+        $errors = session('errors', []);
         return view('painel.user.edit', compact('errors', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
         $dados = $request->only([
             'name',
             'email',
             'status',
+            'ativo',
             'avatar'
         ]);
 
@@ -135,6 +146,7 @@ class UserController extends Controller
                 ]
             );
             unlink(public_path('upload/'.$imageName));
+
         }
 
         // Se não houver erros, redireciona com mensagem de sucesso

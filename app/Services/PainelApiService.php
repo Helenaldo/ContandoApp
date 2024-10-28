@@ -44,9 +44,9 @@ class PainelApiService
      * @param string $token Token de autenticação para acesso à API.
      * @return array Resposta da API convertida em array.
      */
-    public function get(string $endpoint): array
+    public function get(string $endpoint, $params = []): array
     {
-        $response = $this->request('get', $endpoint);
+        $response = $this->request('get', $endpoint, $params);
 
         // Verifica se a requisição foi bem-sucedida e retorna a resposta ou um erro.
         return $this->response('get', $response);
@@ -86,10 +86,6 @@ class PainelApiService
     }
 
     public function response($method, $response) {
-        if($method == 'get' && !$response->successful()) {
-            // Verifica se a requisição foi bem-sucedida e retorna a resposta ou um erro.
-            return ['error' => 'Requisição falhou com o status: ' . $response->status()];
-        }
 
         if(!$response->successful()) {
 
@@ -97,8 +93,8 @@ class PainelApiService
 
             $responseError = $response->json();
              return [
-                 'error' => true,
-                 'message' => $responseError['message'],
+                'error' => true,
+                'message' => $responseError['message'],
             ];
         }
         return $response->json();

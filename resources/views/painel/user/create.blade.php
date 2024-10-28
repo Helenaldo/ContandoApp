@@ -10,7 +10,7 @@
         </div>
         <div class="card-body">
 
-        @if (!empty($errors))
+        @if (!empty($errors) && is_array($errors))
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors as $error)
@@ -24,7 +24,14 @@
                     @endforeach
                 </ul>
             </div>
+        @elseif(!empty($errors))
+        <div class="alert alert-danger">
+            <ul>
+               {!! implode('', $errors->all('<li>:message</li>')) !!}
+            </ul>
+        </div>
         @endif
+
 
             <form action="{{ route('user.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -57,10 +64,6 @@
                     </div><!-- Col -->
                 </div><!-- Row -->
 
-
-
-
-
                 <div class="row">
 
                     <div class="form-group col-sm-4">
@@ -89,13 +92,6 @@
                     </div><!-- Col -->
 
                 </div><!-- Row -->
-
-
-
-
-
-
-
 
 
                 <button type="submit" class="btn btn-primary d-inline-flex align-items-center mr-2">Salvar<i class="mdi mdi-cloud-upload ml-2"></i></button>

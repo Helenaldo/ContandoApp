@@ -22,6 +22,7 @@
                             <thead>
                                 <tr>
                                     <th>Cliente</th>
+                                    <th>CNPJ/CPF</th>
                                     <th>Processo nº</th>
                                     <th>Título</th>
                                     <th>Início</th>
@@ -40,6 +41,7 @@
                                 @endphp
                                 <tr>
                                     <td>{{$processo['cliente']['nome']}}</td>
+                                    <td>{{$processo['cliente']['cpf_cnpj']}}</td>
                                     <td>{{$processo['numero']}}</td>
                                     <td>{{$processo['titulo']}}</td>
                                     <td>{{ \Carbon\Carbon::parse($processo['data'])->format('d/m/Y') }}</td>

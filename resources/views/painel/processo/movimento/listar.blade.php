@@ -44,7 +44,8 @@
                         <h3 class="text-primary">Movimentos</h3>
                     </div>
                     <div class="col-md-8 text-right">
-                        <a href="{{ route('movimento.create') }}" type="button" class="btn btn-primary">Novo movimento</a>
+                        <a href="{{ route('movimento.create') }}?processo_id={{ $processo['id'] }}" type="button" class="btn btn-primary">Novo movimento</a>
+                        <a href="javascript:history.back()" type="button" class="btn btn-secondary">Voltar</a>
                     </div>
 
                 </div>
@@ -57,6 +58,7 @@
                             <tr>
                                 <th>Data</th>
                                 <th>Descrição</th>
+                                <th>Anexo</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -66,6 +68,20 @@
                             <tr>
                                 <td>{{\Carbon\Carbon::parse($movimento['data'])->format('d/m/Y')}}</td>
                                 <td class="text-wrap" tyle="white-space: normal;"> {{$movimento['descricao']}} </td>
+
+                                @if(isset($movimento['anexo']) && !empty($movimento['anexo']))
+
+                                <td>
+                                    <a href="{{ $movimento['anexo'] }}">
+                                        <i data-feather="paperclip"></i>
+                                    </a>
+
+                                </td>
+
+                                @else
+                                <td></td>
+                                @endif
+
                                 <td class="acoes-coluna">
                                     <a href="{{route('movimento.edit', $movimento['id'])}}" class="btn btn-warning btn-sm">Editar</a>
                                     <form class="d-inline" action="{{route('movimento.destroy', $movimento['id'])}}" method="POST">

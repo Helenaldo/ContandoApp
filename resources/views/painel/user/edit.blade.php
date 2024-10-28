@@ -10,7 +10,7 @@
         </div>
         <div class="card-body">
 
-        @if (!empty($errors))
+            @if (!empty($errors) && is_array($errors))
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors as $error)
@@ -24,6 +24,12 @@
                     @endforeach
                 </ul>
             </div>
+        @elseif(!empty($errors))
+        <div class="alert alert-danger">
+            <ul>
+               {!! implode('', $errors->all('<li>:message</li>')) !!}
+            </ul>
+        </div>
         @endif
 
         <form action="{{ route('user.update', ['user' => $user['id'] ])}}" method="POST" enctype="multipart/form-data">
@@ -69,6 +75,15 @@
                                 <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
                             </span>
                         </div>
+                    </div>
+
+                    <div class="form-group col-sm-3">
+                        <label class="control-label">Ativo</label>
+                        <select name="ativo" class="form-control" required>
+                            <option selected="" disabled="">Selecione...</option>
+                            <option value="1" @selected($user['ativo'] === 1) >Ativo</option>
+                            <option value="0" @selected($user['ativo'] === 0)>Inativo</option>
+                        </select>
                     </div>
 
                 </div><!-- Row -->

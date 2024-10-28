@@ -26,24 +26,26 @@
             </div>
         @endif
 
-        <form action="#" method="POST">
-        {{-- <form action="{{ route('movimento.update', ['movimento' => $movimento['id'] ])}}" method="POST"> --}}
+        <form action="{{ route('movimento.update', ['movimento' => $movimento['id'] ])}}" method="POST">
             @method('put')
             @csrf
+
+            <input type="hidden" name="cliente_id" value="{{$movimento['cliente_id']}}">
+            <input type="hidden" name="processo_id" value="{{$movimento['processo_id']}}">
 
                 <div class="row">
 
                     <div class="col-sm-8">
                         <div class="form-group">
                             <label class="control-label">Cliente</label>
-                            <input name="cliente_id" value="Nome do Cliente" type="text" class="form-control" disabled>
+                            <input name="cliente_id" value="{{$movimento['cliente']['nome']}}" type="text" class="form-control" disabled>
                         </div>
                     </div><!-- Col -->
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Processo</label>
-                            <input name="processo_id" value="Título do processo" type="email" class="form-control" disabled>
+                            <input name="processo_id" value="{{$movimento['processo']['numero']}}" type="email" class="form-control" disabled>
                         </div>
                     </div><!-- Col -->
 
@@ -53,11 +55,11 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="control-label">Usuário*</label>
+                            <label class="control-label">Resonsável*</label>
                             <select name="user_id" class="form-control" required>
                                 <option selected="" disabled="">Selecione...</option>
                                 @foreach ($users as $user)
-                                <option value="{{$user['id']}}">{{$user['name']}}</option>
+                                <option value="{{$user['id']}}" @selected($user['id'])>{{$user['name']}}</option>
                                 @endforeach
 
                             </select>
@@ -66,19 +68,31 @@
 
                     <div class="form-group col-sm-4">
                         <label>Anexo (somente pdf)</label>
-                        <input type="file" name="avatar" class="file-upload-default">
+                        @if(isset($movimento['anexo']) && !empty($movimento['anexo']))
+
+                        <a href="{{ $movimento['anexo'] }}">
+                            <i data-feather="paperclip"></i>
+                        </a>
+                        @else
+
+                        @endif
+                        <input type="file" name="anexo" class="file-upload-default">
                         <div class="input-group">
                             <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload">
                             <span class="input-group-append">
                                 <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
                             </span>
+
+
+
                         </div>
+
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label">Data*</label>
-                            <input name="data" type="date" class="form-control" required>
+                            <input name="data" value="{{$movimento['data']}}" type="date" class="form-control" required>
                         </div>
                     </div><!-- Col -->
 
@@ -88,7 +102,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="control-label">Descrição do movimento*</label>
-                            <textarea class="form-control" name="descricao" rows="5" required></textarea>
+                            <textarea class="form-control" name="descricao" rows="5" required>{{$movimento['descricao']}}</textarea>
                         </div>
                     </div><!-- Col -->
 
